@@ -1,6 +1,6 @@
 /* initialize.c - nulluser, sizmem, sysinit */
 
-#include <conf.h>
+#include <conf.h> 
 #include <i386.h>
 #include <kernel.h>
 #include <mark.h>
