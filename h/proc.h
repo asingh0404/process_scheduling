@@ -60,6 +60,10 @@ struct	pentry	{
 	int	fildes[_NFILE];		/* file - device translation	*/
 	int	ppagedev;		/* pageing dgram device		*/
 	int	pwaitret;
+
+	int 	counter;		/* counter value to keep track of ticks for linux based scheduler */
+	int 	goodness;		/* goodness value for linux based scheduler */
+	int 	timeQuantum;		/* time quantum set at each epoch in linux based scheduler */	
 };
 
 

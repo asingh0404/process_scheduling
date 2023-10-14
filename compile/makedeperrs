@@ -1,0 +1,16 @@
+In file included from ./../sys/insert.c:6:0:
+../h/lab2.h:1:0: error: unterminated #ifndef
+ #ifndef _LAB2_H_
+ ^
+In file included from ./../sys/lab2.c:2:0:
+../h/lab2.h:1:0: error: unterminated #ifndef
+ #ifndef _LAB2_H_
+ ^
+In file included from ./../sys/main.c:8:0:
+../h/lab2.h:1:0: error: unterminated #ifndef
+ #ifndef _LAB2_H_
+ ^
+In file included from ./../sys/resched.c:7:0:
+../h/lab2.h:1:0: error: unterminated #ifndef
+ #ifndef _LAB2_H_
+ ^

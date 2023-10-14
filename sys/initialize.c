@@ -1,6 +1,6 @@
 /* initialize.c - nulluser, sizmem, sysinit */
 
-#include <conf.h> 
+#include <conf.h>
 #include <i386.h>
 #include <kernel.h>
 #include <mark.h>
@@ -171,6 +171,10 @@ LOCAL int sysinit()
 	pptr->pargs = 0;
 	pptr->pprio = 0;
 	currpid = NULLPROC;
+	
+	pptr->counter = 0;
+	pptr->goodness = 0;
+	pptr->timeQuantum = 0;
 
 	for (i=0 ; i<NSEM ; i++) {	/* initialize semaphores */
 		(sptr = &semaph[i])->sstate = SFREE;

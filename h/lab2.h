@@ -7,20 +7,22 @@
 void setschedclass(int sched_class);
 int getschedclass();
 int getNextProcess(int random);
-int runnableExists();
-int getNextProcessLinux();
+void next_epoch();
 
-extern int current_epoch_time;
+// int runnableExists();
+// int getNextProcessLinux();
 
-/* Custom data structure to monitor the epoch, goodness and counter values. */
-struct linuxschedent
-{
-	int pprio;       /* Storing priority separately so changes can be reflected only in the next epoch. */
-	int goodness;	 /* Goodness value metric as described in PA1 */
-	int counter;	 /* To store value of the remaining ticks for the process */
-	int epoch_flag;  /* Indicator to show if process can execute in current epoch or not. */
-};
+// extern int current_epoch_time;
 
-extern struct linuxschedent schedtab[];
+// /* Custom data structure to monitor the epoch, goodness and counter values. */
+// struct linuxschedent
+// {
+// 	int pprio;       /* Storing priority separately so changes can be reflected only in the next epoch. */
+// 	int goodness;	 /* Goodness value metric as described in PA1 */
+// 	int counter;	 /* To store value of the remaining ticks for the process */
+// 	int epoch_flag;  /* Indicator to show if process can execute in current epoch or not. */
+// };
+
+// extern struct linuxschedent schedtab[];
 
 #endif
