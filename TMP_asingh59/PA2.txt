@@ -1,0 +1,35 @@
+1.
+Exponential Distribution Scheduler:
+Advantages:
+• Prevents starvation problem to a certain extent compared to the existing Xinu scheduler, as scheduling is based on a random variable following an exponential distribution.
+• Allows prediction of the percentage of run time allotted to each process based on its priority over time.
+Disadvantages:
+• Higher priority processes may not receive significantly more CPU time compared to lower priority processes over time, which may not be beneficial for interactive processes.
+
+Linux-like Scheduler:
+Advantages:
+• Prevents starvation by assigning a fixed quantum time to each process in a particular epoch compared to the existing Xinu scheduler.
+• Provides fairness and speeds up high-priority processes based on goodness values and priority, allowing processes that didn't use up their quantum to carry forward half of it to the next epoch.
+Disadvantages:
+• Involves a significant amount of computations, leading to increased overhead when numerous processes are present. This is due to the need to compute goodness values for each process and compare them with others.
+• Average turnaround time for lower priority processes may become high due to scheduling based on goodness value.
+
+Xinu Round-Robin Scheduler:
+Advantages:
+• Easy to implement and operates efficiently due to a low number of computations involved.
+• Low average waiting time for higher priority processes as it favors high priority processes.
+Disadvantages:
+• There is a risk of starvation as it always schedules the highest priority processes, potentially causing lower priority processes to wait for extended periods.
+
+
+
+2.
+• Exponential Distribution Scheduler:
+• The NULL process is given a chance to run only when no other process is in the ready queue.
+
+• Linux-Like Scheduler:
+• The NULL process gets a chance to run in two scenarios: when all processes complete their quantum in a certain epoch, or when there are no runnable processes. It continues to run until some suspended or new process becomes ready in the next epoch.
+
+• Xinu Round-Robin Scheduler:
+• The NULL process will run when no other process is in the ready queue.
+

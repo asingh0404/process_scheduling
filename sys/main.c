@@ -45,11 +45,11 @@ int main() {
         kill(prC);
 
         kprintf("\nTest Result: A = %d, B = %d, C = %d\n", a_cnt, b_cnt, c_cnt);
-        long sum = a_cnt + b_cnt + c_cnt;
-        int a_ratio = (a_cnt*100)/sum;
-        int b_ratio = (b_cnt*100)/sum;
-        int c_ratio = (c_cnt*100)/sum;
-        kprintf("%d : %d : %d\n", a_ratio, b_ratio, c_ratio);
+        // long sum = a_cnt + b_cnt + c_cnt;
+        // int a_ratio = (a_cnt*100)/sum;
+        // int b_ratio = (b_cnt*100)/sum;
+        // int c_ratio = (c_cnt*100)/sum;
+        // kprintf("%d : %d : %d\n", a_ratio, b_ratio, c_ratio);
     }
     // LINUXSCHED
     else {
@@ -59,7 +59,7 @@ int main() {
         resume(prC = create(proc, 2000, 90, "proc C", 1, 'C'));
 
         while (count++ < LOOP) {
-            kprintf("M");
+            kprintf("M\n");
             for (i = 0; i < 1000000; i++)
                 ;
         }
@@ -116,7 +116,7 @@ int proc(char c) {
     int count = 0;
 
     while (count++ < LOOP) {
-        kprintf("%c", c);
+        kprintf("%c\n", c);
         for (i = 0; i < 1000000; i++)
             ;
     }
