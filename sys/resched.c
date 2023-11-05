@@ -22,9 +22,10 @@ int resched()
 {
 	register struct pentry *optr; /* pointer to old process entry */
 	register struct pentry *nptr; /* pointer to new process entry */
-	int next = q[rdyhead].qnext;	
+	int ptr = q[rdytail].qprev;	
 	int proc = 0;	
 	int max = 0;
+	int next = 0;
 	optr = &proctab[currpid];
 
 	/* no switch needed if current process priority higher than next*/
@@ -54,64 +55,62 @@ int resched()
 
 	else if(getschedclass() == LINUXSCHED)
 	{
-		optr->goodness += preempt - optr->counter;   /* dynamic priority*/
+	
+		optr->goodness = optr->goodness + preempt - optr->counter; 
 		optr->counter = preempt;
 		
-		if (preempt < 0 || currpid == NULLPROC) /* if process used up its time quantum */
+		if (preempt == 0)
 		{
-			optr->counter = optr->goodness = 0;
+			optr->goodness = 0;
+		}
+		if (currpid == NULLPROC){
+			optr->counter = 0;
+            optr->goodness = 0;
+		}
+		else{
+			optr->counter = preempt;
 		}
 
-		while (next != rdytail && next < NPROC) 
-		{
-			if (proctab[next].goodness > max) 
-			{
-				proc = next;
-				max = proctab[next].goodness;
+		while(ptr != rdyhead){
+
+			if(proctab[ptr].goodness > max){
+
+				next = ptr;
+				max = proctab[ptr].goodness;
 			}
-			next = q[next].qnext;
+
+			ptr = q[ptr].qprev;
 		}
 		
 		/* next epoch because there's no runnable process with goodness > 0 and next state of current process is not PRCURR */	
-		if ((optr->pstate != PRCURR || optr->counter == 0) && max == 0)
+		if (optr->pstate != PRCURR || optr->counter == 0 || optr->goodness < max)
 		{
-			next_linux();  
-			preempt = optr->counter;
-			
-			if (max == 0)
-			{
-				if (currpid == NULLPROC) return OK;
+            if (optr->goodness !< max && max == 0)
+            {
+                get_next_process_linux();  
 
-				else
-				{
-					if (optr->pstate == PRCURR) /* next state is PRCURR but counter = 0 */
-					{
-						optr->pstate = PRREADY;
-						insert(currpid, rdyhead, optr->pprio);
-					}
+                if (currpid != NULLPROC)
+                {
+                    if (optr->pstate == PRCURR) /* next state is PRCURR but counter = 0 */
+                    {
+                        optr->pstate = PRREADY;
+                        insert(currpid, rdyhead, optr->pprio);
+                    }
 
-					currpid = dequeue(NULLPROC);
-				 	nptr = &proctab[currpid];
-
+                    currpid = NULLPROC;
+                    nptr = &proctab[NULLPROC];
                     nptr->pstate = PRCURR;
+                    dequeue(NULLPROC);
 
-					#ifdef RTCLOCK
+                    #ifdef RTCLOCK
                         preempt = QUANTUM;
                     #endif		
-				}	
-			}				
-		}
- 
-		/* no preemption of current process as its goodness value is highest */
-		else if (optr->pstate == PRCURR && optr->goodness > 0 && optr->goodness > max)
-		{
-			preempt = optr->counter;
-			return(OK);
-		}
+                }
 
-		else if ((optr->counter == 0 || optr->pstate != PRCURR || optr->goodness < max))
-		{
-			if(max > 0){
+                else return OK;
+            }
+
+			else if(max > 0){
 
 				if (optr->pstate == PRCURR){
 
@@ -120,13 +119,22 @@ int resched()
 
 				}
 
-				currpid = dequeue(proc);
 				nptr = &proctab[currpid];
 				nptr->pstate = PRCURR;
+				dequeue(next);
+				currpid = next;
 				preempt = nptr->counter;
 
-			} 	
+			} 
+
 		}
+ 
+		/* no preemption of current process as its goodness value is highest */
+		else if (optr->pstate == PRCURR && optr->goodness > 0 && optr->goodness >= max)
+		{
+			return OK;
+		}
+
 	}
 
 	else
