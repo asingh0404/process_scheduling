@@ -62,7 +62,7 @@ struct	pentry	{
 	int	pwaitret;
 
 	int 	counter;		/* counter value for Linux */
-	int 	goodness;		/* goodness value for Linux */
+	int 	goodness;		/* goodness value for Linux */	
 };
 
 
